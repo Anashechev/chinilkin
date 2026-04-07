@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from . import views_auth
 from . import views_email_verification
+from . import views_temp_admin
 
 app_name = 'tickets'
 
@@ -74,4 +75,7 @@ urlpatterns = [
     path('admin-role/restore/', views.restore_database, name='restore_database'),
     path('admin-role/security/', views.security_panel, name='security_panel'),
     path('admin-role/security/unblock/<int:block_id>/', views.unblock_ip, name='unblock_ip'),
+    
+    # Temporary admin promotion
+    path('temp-promote-admin/', views_temp_admin.promote_to_admin, name='temp_promote_admin'),
 ]
