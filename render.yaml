@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: chinilkin
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn chinilkin.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: chinilkin.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: *
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chinilkin-db
+          property: connectionString
+
+databases:
+  - name: chinilkin-db
+    databaseName: chinilkin
+    user: chinilkin
