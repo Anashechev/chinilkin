@@ -159,7 +159,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'tickets.User'
 
 # Email settings for password reset - Gmail SMTP с App Password
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if not DEBUG:
+    # Disable email sending in production (Render blocks SMTP)
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_FAIL_SILENTLY = True
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_FAIL_SILENTLY = False
+
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '465'))
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'False').lower() == 'true'
@@ -170,7 +177,6 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'anashechev@gmail.com'
 EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', '30'))
 
 # Дополнительные настройки для Gmail
-EMAIL_FAIL_SILENTLY = False
 EMAIL_SUBJECT_PREFIX = '[Система обслуживания] '
 
 # Настройки для улучшения совместимости с Gmail
